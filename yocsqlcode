@@ -1,0 +1,15 @@
+SELECT
+    SUM(events.event_type = 'imp') AS imps,
+    SUM(events.event_type = 'view') AS views,
+    SUM(events.event_type = 'click') AS clicks
+FROM
+    events
+    INNER JOIN ads ON events.ad_id = ads.ad_id
+    INNER JOIN dsps ON ads.dsp_id = dsps.dsp_id
+    INNER JOIN advertisers ON ads.advertiser_id = advertisers.advertiser_id
+WHERE
+    ads.media_type = 'video'
+    AND advertisers.country = 'France'
+    AND dsps.dsp_name = 'DSPeace'
+    AND datetime(events.timestamp, 'unixepoch', 'localtime') >= '2020-03-01 00:00:00'
+    AND datetime(events.timestamp, 'unixepoch', 'localtime') < '2020-06-01 00:00:00';
